@@ -1,0 +1,48 @@
+logging:
+  config: classpath:log4j2-spring.xml
+
+jwt:
+  schema: Bearer
+  header-name: Authorization
+  iss: dooling
+  secret: saml-test
+  expiration: 3600
+  expiration-remember: 25200
+
+
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://192.168.15.71:3306/security?useUnicode=true&characterEncoding=utf-8&useSSL=true
+    username: root
+    password: root
+  redis:
+    host: 192.168.29.12
+    port: 6379
+  security:
+    saml2:
+      relyingparty:
+        registration:
+          samlexample:
+            signing.credentials:
+              - private-key-location: "classpath:credentials/service-provider-private.key"
+                certificate-location: "classpath:credentials/service-provider-certificate.crt"
+            identityprovider:
+#              entity-id: https://sts.windows.net/6713fa3e-8a36-4a08-912b-caa6bcda0bc6/
+              entity-id: https://1606884361695.authing.cn
+              verification.credentials:
+                #                - certificate-location: "classpath:credentials/identity-provider-certificate.crt"
+                - certificate-location: "classpath:credentials/saml2.cer"
+#              metadata-uri: https://login.microsoftonline.com/6713fa3e-8a36-4a08-912b-caa6bcda0bc6/federationmetadata/2007-06/federationmetadata.xml?appid=766cbbce-b2d9-462e-8fb5-e68371e9c1db
+              metadata-uri: https://core.authing.cn/api/v2/saml-idp/5fc71c0dee9f2c4c5a4593d7/metadata
+              singlesignon:
+#                url: https://login.microsoftonline.com/6713fa3e-8a36-4a08-912b-caa6bcda0bc6/saml2
+                url: https://core.authing.cn/api/v2/saml-idp/5fc71c0dee9f2c4c5a4593d7
+
+mybatis:
+  configuration:
+    #开启Mybatis下划线命名转驼峰命名
+    map-underscore-to-camel-case: true
+  mapper-locations:
+    - classpath*:mybatis/mappers/*.xml
+

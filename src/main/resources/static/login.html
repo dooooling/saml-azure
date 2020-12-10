@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <title>登陆</title>
+
+        <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.5.1/jquery.js"></script>
+    </head>
+    <body>
+        <h1>登陆</h1>
+        <form method="post" action="/login">
+            <div>
+                用户名：<input type="text" name="username">
+            </div>
+            <div>
+                密码：<input type="password" name="password">
+            </div>
+            <div>
+                <button type="submit">立即登陆</button>
+            </div>
+        </form>
+
+
+        <input type="button" title="saml登录" value="saml登录" onclick="samlLogin()"/>
+    </body>
+
+
+    <script type="application/javascript">
+        function samlLogin() {
+            $.ajax({
+                url: "http://www.saml-azure.com/auth/saml/login",
+                type: "POST",
+                xhrFields: {
+                    withCredentials: true
+                },
+                crossDomain: true,
+                success: function (data) {
+                    // window.open('http://www.saml-azure.com/saml2/authenticate/samlexample', 'new', 'location=no, toolbar=no');
+                    window.open('./saml.html', 'new', 'location=no, toolbar=no');
+                    setTimeout(checkSamlLoginSuccess, 3000, data.data);
+                }
+            });
+        }
+
+        function delayedExecute(callback = null, time = 3000) {
+            setTimeout(() => {
+                callback && callback();
+            }, time)
+        }
+
+        function checkSamlLoginSuccess(loginId) {
+            $.ajax({
+                url: "http://www.saml-azure.com/auth/saml/result/" + loginId,
+                type: "POST",
+                xhrFields: {
+                    withCredentials: true
+                },
+                crossDomain: true,
+                success: function (data) {
+                    if (data.success) {
+                        $.ajax({
+                            url: "http://www.saml-azure.com",
+                            type: "GET",
+                            xhrFields: {
+                                withCredentials: true
+                            },
+                            headers: {
+                                'Authorization': 'Bearer' + data.data
+                            },
+                            crossDomain: true,
+                            success: function (data) {
+                                alert(data);
+                            }
+                        });
+                    } else if (data.code == 310) {
+                        setTimeout(checkSamlLoginSuccess, 3000, loginId);
+                    } else {
+                        alert("登录无效")
+                    }
+                }
+            });
+        }
+    </script>
+</html>
