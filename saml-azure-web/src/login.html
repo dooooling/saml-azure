@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <title>登陆</title>
+
+        <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.5.1/jquery.js"></script>
+    </head>
+    <body>
+        <h1>登陆</h1>
+        <div>
+            用户名：<input type="text" name="username" id="username">
+        </div>
+        <div>
+            密码：<input type="password" name="password" id="password">
+        </div>
+        <div>
+            <button onclick="login()">立即登陆</button>
+        </div>
+
+
+        <input type="button" title="saml登录" value="saml登录" onclick="samlLogin()"/>
+    </body>
+
+
+    <script type="application/javascript">
+
+        function login() {
+            $.ajax({
+                url: "http://www.saml-azure.com/auth/login",
+                type: "POST",
+                contentType: 'application/json',
+                dataType: 'json',
+                xhrFields: {
+                    withCredentials: true
+                },
+                data: JSON.stringify({username: $('#username').val(), password: $('#password').val()}),
+                crossDomain: true,
+                success: function (data) {
+                    loadInfo(data.data);
+                }
+            });
+        }
+
+        function samlLogin() {
+            $.ajax({
+                url: "http://www.saml-azure.com/auth/saml/login",
+                type: "POST",
+                xhrFields: {
+                    withCredentials: true
+                },
+                crossDomain: true,
+                success: function (data) {
+                    window.open('http://www.saml-azure.com/saml2/authenticate/samlexample?samlLoginId=' + data.data, 'new', 'location=no, toolbar=no');
+                    // window.open('./saml.html', 'new', 'location=no, toolbar=no');
+                    setTimeout(checkSamlLoginSuccess, 3000, data.data);
+                }
+            });
+        }
+
+        function delayedExecute(callback = null, time = 3000) {
+            setTimeout(() => {
+                callback && callback();
+            }, time)
+        }
+
+        function checkSamlLoginSuccess(loginId) {
+            $.ajax({
+                url: "http://www.saml-azure.com/auth/saml/result/" + loginId,
+                type: "POST",
+                xhrFields: {
+                    withCredentials: true
+                },
+                crossDomain: true,
+                success: function (data) {
+                    if (data.success) {
+                        loadInfo(data.data);
+                    } else if (data.code == 310) {
+                        setTimeout(checkSamlLoginSuccess, 3000, loginId);
+                    } else {
+                        alert("登录无效")
+                    }
+                }
+            });
+
+
+        }
+
+        function loadInfo(token) {
+            $.ajax({
+                url: "http://www.saml-azure.com/user/info",
+                type: "POST",
+                xhrFields: {
+                    withCredentials: true
+                },
+                headers: {
+                    'Authorization': 'Bearer' + token
+                },
+                crossDomain: true,
+                success: function (data) {
+                    console.log(data);
+                    alert(data);
+                }
+            });
+        }
+    </script>
+</html>

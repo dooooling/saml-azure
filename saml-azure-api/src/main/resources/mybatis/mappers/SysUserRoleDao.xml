@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.dooling.samlazure.dao.SysUserRoleDao">
+    <resultMap id="BaseResultMap" type="cn.dooling.samlazure.domain.entity.SysUserRole">
+        <result column="user_id" jdbcType="INTEGER" property="userId"/>
+        <result column="role_id" jdbcType="INTEGER" property="roleId"/>
+        <result column="id" jdbcType="INTEGER" property="id"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        id
+        , `user_id`,role_id
+    </sql>
+    <insert id="insert" parameterType="cn.dooling.samlazure.domain.entity.SysUserRole">
+        insert into sys_user_role (user_id, role_id, id)
+        values (#{userId,jdbcType=INTEGER}, #{roleId,jdbcType=INTEGER}, #{id,jdbcType=INTEGER})
+    </insert>
+    <insert id="insertSelective" parameterType="cn.dooling.samlazure.domain.entity.SysUserRole">
+        insert into sys_user_role
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="userId != null">
+                user_id,
+            </if>
+            <if test="roleId != null">
+                role_id,
+            </if>
+            <if test="id != null">
+                id,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="userId != null">
+                #{userId,jdbcType=INTEGER},
+            </if>
+            <if test="roleId != null">
+                #{roleId,jdbcType=INTEGER},
+            </if>
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
+    <select id="selectByUserId" parameterType="java.lang.Integer"
+            resultType="cn.dooling.samlazure.domain.entity.SysUserRole">
+        select
+        <include refid="Base_Column_List"/>
+        from sys_user_role
+        where user_id = #{user_id,jdbcType=INTEGER}
+    </select>
+</mapper>
