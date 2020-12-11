@@ -60,7 +60,7 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
         UserDetails userDetails = (UserDetails) authResult.getPrincipal();
         //写入token到response
-        jwtHelper.createTokenToHeader(userDetails.getUsername(), response);
+        jwtHelper.createTokenToHeader(userDetails.getUsername(), userDetails.getPassword(), response);
         super.successfulAuthentication(request, response, chain, authResult);
     }
 }

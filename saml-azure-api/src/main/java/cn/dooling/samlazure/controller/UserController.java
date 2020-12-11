@@ -13,11 +13,8 @@ import java.security.Principal;
 @RestController
 @RequestMapping("/user")
 public class UserController {
-    @Autowired
-    private UserDetailsService userDetailsService;
-
     @PostMapping("/info")
     public ResponseDTO<Object> subject(Authentication authentication, Principal principal) {
-        return new ResponseDTO<>(userDetailsService.loadUserByUsername(principal.getName()));
+        return new ResponseDTO<>(principal);
     }
 }

@@ -7,18 +7,23 @@ import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.HashMap;
 
 @Component
 public class JWTHelper {
     @Autowired
     private JWTProperties jwtProperties;
 
-    public String createToken(String id) {
-        return JwtUtils.createToken(id, jwtProperties.getExpiration(), jwtProperties.getIss(), jwtProperties.getSecret());
+    private static final String PASSWORD_KEY = "password";
+
+    public String createToken(String id, String password) {
+        return JwtUtils.createToken(id, jwtProperties.getExpiration(), jwtProperties.getIss(), jwtProperties.getSecret(), new HashMap<String, Object>(5) {{
+            put(PASSWORD_KEY, password);
+        }});
     }
 
-    public String createTokenToHeader(String id, HttpServletResponse response) {
-        String token = createToken(id);
+    public String createTokenToHeader(String id, String password, HttpServletResponse response) {
+        String token = createToken(id, password);
         response.addHeader(jwtProperties.getHeaderName(), jwtProperties.getSchema() + " " + token);
         return token;
     }
@@ -44,5 +49,9 @@ public class JWTHelper {
 
     public String getId(String token) {
         return JwtUtils.getSubject(token, jwtProperties.getSecret());
+    }
+
+    public String getPassword(String token) {
+        return JwtUtils.getTokenBody(token, jwtProperties.getSecret()).get(PASSWORD_KEY).toString();
     }
 }

@@ -1,4 +1,4 @@
-package cn.dooling.samlazure.config.saml;
+package cn.dooling.samlazure.config;
 
 import cn.dooling.samlazure.domain.entity.SysRole;
 import cn.dooling.samlazure.domain.entity.SysUser;

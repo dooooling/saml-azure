@@ -1,11 +1,13 @@
 package cn.dooling.samlazure.controller;
 
 import cn.dooling.samlazure.config.saml.SamlProperties;
+import cn.dooling.samlazure.domain.dto.LoginFormDTO;
 import cn.dooling.samlazure.domain.dto.ResponseDTO;
 import cn.dooling.samlazure.domain.dto.RegisterFormDTO;
 import cn.dooling.samlazure.helper.JWTHelper;
 import cn.dooling.samlazure.service.RedisService;
 import cn.hutool.core.util.StrUtil;
+import cn.hutool.json.JSONUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -48,7 +50,8 @@ public class AuthController {
             String s = redisService.get(key);
             if (StrUtil.isNotBlank(s)) {
                 redisService.del(key);
-                return new ResponseDTO<>(true, jwtHelper.createToken(s));
+                LoginFormDTO loginFormDTO = JSONUtil.toBean(s, LoginFormDTO.class);
+                return new ResponseDTO<>(true, jwtHelper.createToken(loginFormDTO.getUsername(), loginFormDTO.getPassword()));
             }
             return new ResponseDTO<>(310, false);
         }

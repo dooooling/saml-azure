@@ -4,6 +4,7 @@ import cn.dooling.samlazure.helper.JWTHelper;
 import cn.hutool.core.util.StrUtil;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
@@ -39,10 +40,12 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
     }
 
     // 这里从token中获取用户信息并新建一个token
-    private UsernamePasswordAuthenticationToken getAuthentication(String tokenHeader) {
+    private Authentication getAuthentication(String tokenHeader) {
         String username = jwtHelper.getId(tokenHeader);
+        String password = jwtHelper.getPassword(tokenHeader);
         if (username != null) {
-            return new UsernamePasswordAuthenticationToken(username, null, new ArrayList<>());
+            return getAuthenticationManager().authenticate(new UsernamePasswordAuthenticationToken(username, password));
+//            return new UsernamePasswordAuthenticationToken(username, null, new ArrayList<>());
         }
         return null;
     }
