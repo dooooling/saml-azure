@@ -14,3 +14,7 @@ saml-azure 是在前后端分离场，且使用jwt认证场景下完成saml单�
 ### tips
 * 由于 Azure Active Directory 设置回调域名除了localhost,都需要https。所以在换用本地域名后使用了[authing](https://wwww.authing.cn)完成了后续测试。
 * 注意相关配置项的更换。
+
+
+### 参考
+https://github.com/spring-projects/spring-security/tree/master/saml2/saml2-service-provider
