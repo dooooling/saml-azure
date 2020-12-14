@@ -1,6 +1,5 @@
 package cn.dooling.samlazure.config.saml;
 
-import cn.dooling.samlazure.controller.AuthController;
 import cn.dooling.samlazure.domain.dto.LoginFormDTO;
 import cn.dooling.samlazure.domain.dto.ResponseDTO;
 import cn.dooling.samlazure.service.RedisService;

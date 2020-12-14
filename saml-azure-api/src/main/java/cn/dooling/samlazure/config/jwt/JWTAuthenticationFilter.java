@@ -1,7 +1,7 @@
 package cn.dooling.samlazure.config.jwt;
 
-import cn.dooling.samlazure.domain.dto.ResponseDTO;
 import cn.dooling.samlazure.domain.dto.LoginFormDTO;
+import cn.dooling.samlazure.domain.dto.ResponseDTO;
 import cn.dooling.samlazure.helper.JWTHelper;
 import cn.hutool.extra.servlet.ServletUtil;
 import cn.hutool.http.ContentType;
@@ -12,7 +12,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
@@ -41,7 +40,6 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         try {
             LoginFormDTO loginUser = new ObjectMapper().readValue(request.getInputStream(), LoginFormDTO.class);
             UsernamePasswordAuthenticationToken authRequest = new UsernamePasswordAuthenticationToken(loginUser.getUsername(), loginUser.getPassword());
-            // Allow subclasses to set the "details" property
             setDetails(request, authRequest);
             return getAuthenticationManager()
                     .authenticate(authRequest);

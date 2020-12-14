@@ -3,7 +3,6 @@ package cn.dooling.samlazure.config.saml;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.AuthenticatedPrincipal;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -13,7 +12,7 @@ import org.springframework.security.saml2.provider.service.authentication.Saml2A
 import org.springframework.stereotype.Component;
 
 /**
- * 用于saml登录成功后提供身份信息
+ * saml身份验证提供
  */
 @Component
 public class SamlAuthenticationProvider implements AuthenticationProvider {

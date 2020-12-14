@@ -26,6 +26,10 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
+/**
+ * saml请求登录拦截器
+ * 添加从请求中拦截samlLoginId并写入Cookie的相关操作
+ */
 public class CustomSaml2WebSsoAuthenticationRequestFilter extends Saml2WebSsoAuthenticationRequestFilter {
 
     private final Saml2AuthenticationRequestContextResolver authenticationRequestContextResolver;

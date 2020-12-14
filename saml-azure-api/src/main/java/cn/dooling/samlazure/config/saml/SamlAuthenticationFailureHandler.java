@@ -11,6 +11,9 @@ import org.springframework.stereotype.Component;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+/**
+ * saml登录失败Handler
+ */
 @Component
 public class SamlAuthenticationFailureHandler implements AuthenticationFailureHandler {
     @Override
